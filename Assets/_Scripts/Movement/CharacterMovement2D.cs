@@ -1,12 +1,10 @@
 using UnityEngine;
 
-
 [RequireComponent(typeof(Rigidbody2D))]
-public class CharacterMovement2D : MonoBehaviour
+public class CharacterMovement2D : MonoBehaviour, IMovable
 {
-
-    private Rigidbody2D rb;
     [SerializeField] private float maxSpeedX;
+    private Rigidbody2D rb;
     private float directionX;
 
     void Awake()
@@ -14,11 +12,10 @@ public class CharacterMovement2D : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void SetInput(float horizontal)
+    public void SetInput(Vector2 input)
     {
-
-        directionX = horizontal;
-        
+        input.y = 0;
+        directionX = input.x;
 
     }
 
@@ -26,7 +23,7 @@ public class CharacterMovement2D : MonoBehaviour
     void FixedUpdate()
     {
 
-        rb.velocity = new Vector2(directionX * maxSpeedX * Time.fixedDeltaTime, rb.velocity.y);
+        rb.velocity = new Vector2(directionX * maxSpeedX * Time.deltaTime, rb.velocity.y);
 
 
     }

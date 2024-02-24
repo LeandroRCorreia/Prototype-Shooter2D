@@ -3,61 +3,47 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterMovement2D))]
 public class PlayerController : MonoBehaviour
 {
-
-    CharacterMovement2D characterMovement;
-
-
-    [Header("Weapon Data Params")]
-    [SerializeField] private Transform muzzle;
-    [SerializeField] private Transform riflePivot;
-    [SerializeField] private Projectile projectileToShoot;
+    [SerializeField] private RotationalShooter rifleController;
+    private CharacterMovement2D characterMovement;
+    public static PlayerController PlayerReference {get; private set;}
 
     void Awake()
     {
+        if(PlayerReference == null)
+        {
+            PlayerReference = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         characterMovement = GetComponent<CharacterMovement2D>();
     }
 
     void Update()
     {
-        var horizontal = Input.GetAxisRaw("Horizontal");
-
-        UpdateGunBehaviour();
-
-        characterMovement.SetInput(horizontal);
+        UpdateWeaponBehaviour();
+        UpdateCharacterMovementBehaviour();
+        
     }
 
-    private void UpdateGunBehaviour()
+    private void UpdateWeaponBehaviour()
     {
-        Debug.Log(muzzle.position);
-        ProcessRotateRifle();
         if (Input.GetMouseButtonDown(0))
         {
-            SpawnShoot();
+            rifleController.ShootProjectile();
         }
-    }
-
-    private void ProcessRotateRifle()
-    {
+        
         var mouseScreenPosition = Input.mousePosition;
         var worldSpaceMousePosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-        var toMouseScreenPosition = worldSpaceMousePosition - riflePivot.position;
-
-        ProcessRotateWeapon(toMouseScreenPosition);
+        rifleController.ProcessRotate(Vector3.forward, worldSpaceMousePosition);
     }
 
-    private void ProcessRotateWeapon(Vector3 rotateToThisVector)
+    private void UpdateCharacterMovementBehaviour()
     {
-        Quaternion lookRotation = Quaternion.LookRotation(Vector3.forward, rotateToThisVector);
-
-        if(lookRotation != riflePivot.rotation) riflePivot.rotation = lookRotation;
-    }
-
-    private void SpawnShoot()
-    {
-        var projectile = Instantiate(projectileToShoot);
-        projectile.transform.position = muzzle.position;
-        projectile.Direction = riflePivot.up;
-
+        var horizontal = Input.GetAxisRaw("Horizontal");
+        characterMovement.SetInput(new Vector2(horizontal, 0));
     }
 
     void OnDrawGizmos()

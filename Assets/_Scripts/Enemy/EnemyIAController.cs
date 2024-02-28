@@ -27,9 +27,6 @@ public class EnemyIAController : MonoBehaviour
         UpdateWeaponBehaviours();
     }
 
-
-    #region MovementIA
-
     private void UpdateMovementIA() 
     {
         if (movable != null)
@@ -57,11 +54,9 @@ public class EnemyIAController : MonoBehaviour
         
     }
 
-    #endregion
-
     private void UpdateWeaponBehaviours()
     {
-        rotationalShooter.ProcessRotate(Vector3.forward, PlayerController.PlayerReference.transform.position);
+        rotationalShooter.ProcessRotateGun(PlayerController.PlayerReference.transform.position);
         if (Time.time >= NextShootTime)
         {
             lastShootTime = Time.time;

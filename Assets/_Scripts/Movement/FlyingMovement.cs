@@ -7,8 +7,8 @@ public class FlyingMovement : MonoBehaviour, IMovable
 
     [Header("Movement Params")]
     [SerializeField] private float maxSpeedX;
-
-    private Vector3 dir;
+    public Vector2 Direction {get; private set;}
+    
 
     void Awake()
     {
@@ -18,13 +18,13 @@ public class FlyingMovement : MonoBehaviour, IMovable
     public void SetInput(Vector2 input)
     {
 
-        dir = input.normalized;
+        Direction = input.normalized;
 
     }
 
     void FixedUpdate()
     {
-        var targetPosition = transform.position + maxSpeedX * Time.fixedDeltaTime * dir;
+        var targetPosition = transform.position + maxSpeedX * Time.fixedDeltaTime * (Vector3)Direction;
 
         rb.MovePosition(targetPosition);
     }

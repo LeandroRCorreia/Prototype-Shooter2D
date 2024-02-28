@@ -1,11 +1,16 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterMovement2D))]
+[RequireComponent(typeof(CharacterMovement2D), typeof(Collider2D))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private RotationalShooter rifleController;
     private CharacterMovement2D characterMovement;
+    private CharacterFacing2D characterFacing;
+    private Collider2D coll;
     public static PlayerController PlayerReference {get; private set;}
+
+    
+
 
     void Awake()
     {
@@ -19,28 +24,33 @@ public class PlayerController : MonoBehaviour
         }
 
         characterMovement = GetComponent<CharacterMovement2D>();
+        characterFacing = GetComponent<CharacterFacing2D>();
+        coll = GetComponent<Collider2D>();
     }
 
     void Update()
     {
-        UpdateWeaponBehaviour();
-        UpdateCharacterMovementBehaviour();
+        ProcessWeaponBehaviour();
+        ProcessCharacterMovementBehaviour();
         
     }
 
-    private void UpdateWeaponBehaviour()
+    private void ProcessWeaponBehaviour()
     {
         if (Input.GetMouseButtonDown(0))
         {
             rifleController.ShootProjectile();
         }
-        
+
         var mouseScreenPosition = Input.mousePosition;
         var worldSpaceMousePosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-        rifleController.ProcessRotate(Vector3.forward, worldSpaceMousePosition);
+        var toMouseDir = (worldSpaceMousePosition - coll.bounds.center).normalized;
+        characterFacing.UpdateFacing(toMouseDir.x);
+
+        rifleController.ProcessRotateGun(worldSpaceMousePosition);
     }
 
-    private void UpdateCharacterMovementBehaviour()
+    private void ProcessCharacterMovementBehaviour()
     {
         var horizontal = Input.GetAxisRaw("Horizontal");
         characterMovement.SetInput(new Vector2(horizontal, 0));

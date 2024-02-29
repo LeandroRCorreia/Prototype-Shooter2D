@@ -15,4 +15,4 @@ MonoBehaviour:
   projectileToShoot: {fileID: 1961726496123627819, guid: dfcfba492abe63b4397645bdc705dab1, type: 3}
   maxAngleDegress: 120
   sprite: {fileID: 21300000, guid: 725a5b7a6f23a834ebc3054276c49979, type: 3}
-  cadencyTime: 5
+  cadencyTime: 0.35

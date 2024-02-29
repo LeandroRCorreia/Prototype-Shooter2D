@@ -10,11 +10,14 @@ public class RotationalShooter : MonoBehaviour
     [SerializeField] private SpriteRenderer weaponSpriteRenderer;
     private float maxAngleDegress;
     private float lastShootTime = Mathf.NegativeInfinity;
-
     private Vector3 lastPointToLook;
-    private Vector3 UserWeaponCenterCollDirToAimPoint => lastPointToLook - userWeaponColl.bounds.center;
 
+    [Header("Particles")]
+    [SerializeField] private ParticleSystem particleProjectileAmmo;
+
+    private Vector3 UserWeaponCenterCollDirToAimPoint => lastPointToLook - userWeaponColl.bounds.center;
     private float TimeNextShoot => lastShootTime + weaponSO.CadencyTime;
+
 
     void OnEnable()
     {
@@ -77,5 +80,10 @@ public class RotationalShooter : MonoBehaviour
         var projectile = Instantiate(weaponSO.ProjectileToShoot);
         projectile.transform.SetPositionAndRotation(shootMuzzle.position, shootMuzzle.rotation);
         projectile.Direction = shootMuzzle.right;
+        if(particleProjectileAmmo != null)
+        {
+            particleProjectileAmmo.Play();
+
+        }
     }
 }

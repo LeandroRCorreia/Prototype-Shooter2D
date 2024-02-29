@@ -54,7 +54,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 89424acb3c81e874cb10bf63de3400d8, type: 2}
     - target: {fileID: 3100412392557283312, guid: 174bec8cb43322b4cb995696c848cf40, type: 3}
       propertyPath: m_Name
-      value: RotationalShooter_FN-Scar Variant
+      value: RotationalShooter_FN-Scar
       objectReference: {fileID: 0}
     - target: {fileID: 4340873414896861002, guid: 174bec8cb43322b4cb995696c848cf40, type: 3}
       propertyPath: m_Sprite
